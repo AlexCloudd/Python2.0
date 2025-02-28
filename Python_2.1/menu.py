@@ -1,4 +1,4 @@
-from working_file import export_users, export_services
+from working_file import FileManager  
 from abc import ABC, abstractmethod
 
 class TextOutput(ABC):
@@ -19,7 +19,7 @@ class Menu:
         self.user = user
         self.services = services
         self.text_output = text_output
-
+        self.file_manager = FileManager()  
     def display_services(self):
         try:
             for i, service in enumerate(self.services, start=1):
@@ -87,6 +87,7 @@ class AdminMenu(Menu):
     def __init__(self, admin, services, users, text_output: TextOutput):
         super().__init__(admin, services, text_output)
         self.users = users
+        self.file_manager = FileManager()  
 
     def new_service(self):
         try:
@@ -96,7 +97,7 @@ class AdminMenu(Menu):
             popularity = int(input("Введите популярность: "))
             new_service = {'name': name, 'price': price, 'duration': duration, 'popularity': popularity}
             self.services.append(new_service)
-            export_services("services.txt", self.services)
+            self.file_manager.export_services(self.services)  
             self.text_output.display_text("Услуга успешно добавлена.")
         except ValueError:
             self.text_output.display_text("Ошибка: введите корректные числовые значения.")
@@ -109,7 +110,7 @@ class AdminMenu(Menu):
             service_to_delete = next((s for s in self.services if s['name'] == name), None)
             if service_to_delete:
                 self.services.remove(service_to_delete)
-                export_services("services.txt", self.services)
+                self.file_manager.export_services(self.services)  
                 self.text_output.display_text(f"Услуга '{name}' успешно удалена.")
             else:
                 self.text_output.display_text("Услуга не найдена.")
@@ -127,7 +128,7 @@ class AdminMenu(Menu):
                 service_to_edit['price'] = new_price
                 service_to_edit['duration'] = new_duration
                 service_to_edit['popularity'] = new_popularity
-                export_services("services.txt", self.services)
+                self.file_manager.export_services(self.services)  
                 self.text_output.display_text(f"Услуга '{name}' успешно обновлена.")
             else:
                 self.text_output.display_text("Услуга не найдена.")
@@ -147,7 +148,7 @@ class AdminMenu(Menu):
             self.text_output.display_text(f"Самая популярная услуга: {most_popular_service['name']} (популярность: {most_popular_service['popularity']})")
         except Exception as e:
             self.text_output.display_text(f"Ошибка при выводе статистики: {e}")
-            
+
     def manage_users(self):
         "Управление пользователями для администратора"
         try:
@@ -173,14 +174,14 @@ class AdminMenu(Menu):
                         'created_at': '2024-01-01'
                     }
                     self.users.append(new_user)
-                    export_users("users.txt", self.users)  
+                    self.file_manager.export_users(self.users)  
                     self.text_output.display_text(f"Пользователь {username} успешно создан.")
                 elif choice == '2':
                     username = input("Введите имя пользователя для удаления: ")
                     user_to_delete = next((u for u in self.users if u['username'] == username), None)
                     if user_to_delete:
                         self.users.remove(user_to_delete)
-                        export_users("users.txt", self.users)  
+                        self.file_manager.export_users(self.users)  
                         self.text_output.display_text(f"Пользователь {username} успешно удален.")
                     else:
                         self.text_output.display_text("Пользователь не найден.")
@@ -194,7 +195,7 @@ class AdminMenu(Menu):
                         user_to_edit['password'] = new_password
                         user_to_edit['role'] = new_role
                         user_to_edit['subscription_type'] = new_subscription
-                        export_users("users.txt", self.users) 
+                        self.file_manager.export_users(self.users)  
                         self.text_output.display_text(f"Пользователь {username} успешно обновлен.")
                     else:
                         self.text_output.display_text("Пользователь не найден.")
@@ -203,4 +204,4 @@ class AdminMenu(Menu):
                 else:
                     self.text_output.display_text("Неверный ввод.")
         except Exception as e:
-            self.text_output.display_text(f"Ошибка при управлении пользователями: {e}")        
+            self.text_output.display_text(f"Ошибка при управлении пользователями: {e}")
