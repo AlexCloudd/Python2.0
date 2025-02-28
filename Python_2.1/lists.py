@@ -21,11 +21,9 @@ class Lists:
             ]
             self.__save_services()
 
-    @property
     def users(self):
         return self.__users
 
-    @property
     def services(self):
         return self.__services
 
