@@ -4,7 +4,6 @@ from menu import UserMenu, AdminMenu, UserTextOutput, AdminTextOutput
 
 class Openning_menu:
 
-    @staticmethod
     def user_menu(user):
         lists = Lists()  
         um = UserMenu(user, lists.services, UserTextOutput())  
@@ -37,7 +36,6 @@ class Openning_menu:
             else:
                 print("Неверный ввод.")
 
-    @staticmethod
     def admin_menu(admin_user):
         lists = Lists() 
         am = AdminMenu(admin_user, lists.services, lists.users, AdminTextOutput())  
