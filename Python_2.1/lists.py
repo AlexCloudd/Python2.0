@@ -1,9 +1,10 @@
-from working_file import import_users, export_users, import_services, export_services
+from working_file import FileManager
 
 class Lists:
     def __init__(self):
-        self.__users = import_users("users.txt")
-        self.__services = import_services("services.txt")
+        self.file_manager = FileManager()  
+        self.__users = self.file_manager.import_users()
+        self.__services = self.file_manager.import_services()
 
         if not self.__users:
             self.__users = [
@@ -30,14 +31,14 @@ class Lists:
 
     def add_user(self, user):
         self.__users.append(user)
-        self.__save_users() 
+        self.__save_users()
 
     def add_service(self, service):
         self.__services.append(service)
-        self.__save_services() 
+        self.__save_services()
 
     def __save_users(self):
-        export_users("users.txt", self.__users)
+        self.file_manager.export_users(self.__users)
 
     def __save_services(self):
-        export_services("services.txt", self.__services)
+        self.file_manager.export_services(self.__services)
